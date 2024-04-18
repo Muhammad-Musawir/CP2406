@@ -11,7 +11,9 @@ namespace Records {
 	{
 	public:
 		Employee& addEmployee(const std::string& firstName,
-							  const std::string& lastName);
+		                      const std::string& middleName,
+							  const std::string& lastName,
+							  const std::string& address);
 		Employee& getEmployee(int employeeNumber);
 		Employee& getEmployee(const std::string& firstName,
 							  const std::string& lastName);

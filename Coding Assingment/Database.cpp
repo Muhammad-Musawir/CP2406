@@ -7,9 +7,12 @@ using namespace std;
 namespace Records {
 
 	Employee& Database::addEmployee(const string& firstName,
-		const string& lastName)
+	    const std::string& middleName,
+		const string& lastName,
+		const std::string& address)
 	{
-		Employee theEmployee(firstName, lastName);
+		Employee theEmployee(firstName, middleName, lastName);
+		theEmployee.setAddress(address);
 		theEmployee.setEmployeeNumber(mNextEmployeeNumber++);
 		theEmployee.hire();
 		mEmployees.push_back(theEmployee);

@@ -5,9 +5,8 @@ using namespace std;
 
 namespace Records {
 
-	Employee::Employee(const std::string& firstName, const std::string& lastName)
-		: mFirstName(firstName)
-		, mLastName(lastName)
+	Employee::Employee(const std::string& firstName, const std::string& middleName, const std::string& lastName)
+    : mFirstName(firstName), mMiddleName(middleName), mLastName(lastName) 
 	{
 	}
 
@@ -30,6 +29,16 @@ namespace Records {
 	{
 		mHired = false;
 	}
+	void Employee::setAddress(const std::string& address)
+    {
+        mAddress = address;
+    }
+
+    // Definition for getAddress function
+    const std::string& Employee::getAddress() const
+    {
+        return mAddress;
+    }
 
 	void Employee::display() const
 	{
