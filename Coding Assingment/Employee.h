@@ -7,9 +7,11 @@ namespace Records {
 
     class Employee {
     public:
+        // Constructors
         Employee() = default;
         Employee(const std::string& firstName, const std::string& middleName, const std::string& lastName);
 
+        // Member functions
         void promote(int raiseAmount = 1000);
         void demote(int demeritAmount = 1000);
         void hire(); // Hires or rehires the employee

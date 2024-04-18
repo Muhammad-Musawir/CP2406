@@ -19,8 +19,10 @@ namespace Records {
 							  const std::string& lastName);
 
 		void displayAll() const;
+		void fireEmployee(int employeeNumber);
 		void displayCurrent() const;
 		void displayFormer() const;
+		void save(std::ofstream& outputFile); // Save database to file
 
 	private:
 		std::vector<Employee> mEmployees;

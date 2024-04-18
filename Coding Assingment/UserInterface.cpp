@@ -19,53 +19,54 @@ void doHire(Database& db);
 void doFire(Database& db);
 void doPromote(Database& db);
 void doDemote(Database& db);
+void saveDatabaseToFile(Database& db);
 
 int main()
 {
-	Database employeeDB;
+    Database employeeDB;
 
-	bool done = false;
-	while (!done) {
-		int selection = displayMenu();
-		switch (selection) {
-		case 0:
-			done = true;
-			break;
-		case 1:
-			doHire(employeeDB);
-			break;
-		case 2:
-			doFire(employeeDB);
-			break;
-		case 3:
-			doPromote(employeeDB);
-			break;
-		case 4:
-			employeeDB.displayAll();
-			break;
-		case 5:
-			employeeDB.displayCurrent();
-			break;
-		case 6:
-			employeeDB.displayFormer();
-			break;
-		default:
-			cerr << "Unknown command." << endl;
-			break;
-		}
-	}
+    bool done = false;
+    while (!done) {
+        int selection = displayMenu();
+        switch (selection) {
+        case 0:
+            done = true;
+            break;
+        case 1:
+            doHire(employeeDB);
+            break;
+        case 2:
+            doFire(employeeDB);
+            break;
+        case 3:
+            doPromote(employeeDB);
+            break;
+        case 4:
+            employeeDB.displayAll();
+            break;
+        case 5:
+            employeeDB.displayCurrent();
+            break;
+        case 6:
+            employeeDB.displayFormer();
+            break;
+        case 7:
+            generateNewDatabase(employeeDB);
+            break;
+        case 8:
+            saveDatabaseToFile(employeeDB);
+            break;
+        default:
+            cerr << "Unknown command." << endl;
+            break;
+        }
+    }
 
-	return 0;
+    return 0;
 }
 
 int displayMenu()
 {
-	// Note:
-	//		One important note is that this code assumes that the user will
-	//		"play nice" and type a number when a number is requested.
-	//		When you read about I/O in Chapter 13, you will learn how to
-	//		protect against bad input.
-
     int selection;
 
     cout << endl;
@@ -77,12 +78,17 @@ int displayMenu()
     cout << "4) List all employees" << endl;
     cout << "5) List all current employees" << endl;
     cout << "6) List all former employees" << endl;
-    cout << "7) Generate new database" << endl; // New option
+    cout << "7) Generate new database" << endl;
+    cout << "8) Save database to file" << endl;
     cout << "0) Quit" << endl;
     cout << endl;
     cout << "---> ";
 
     cin >> selection;
+
+    // Clear the input buffer to prevent any leftover characters
+    cin.clear();
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
     return selection;
 }
@@ -110,9 +116,7 @@ void doFire(Database& db)
     cin >> employeeNumber;
 
     try {
-        Employee& emp = db.getEmployee(employeeNumber);
-        emp.fire();
-        cout << "Employee " << employeeNumber << " terminated." << endl;
+        db.fireEmployee(employeeNumber);
     } catch (const std::logic_error& exception) {
         cerr << "Unable to terminate employee: " << exception.what() << endl;
     }
@@ -135,7 +139,7 @@ void doPromote(Database& db)
         cerr << "Unable to promote employee: " << exception.what() << endl;
     }
 }
-// Function to generate a random string of given length
+
 string generateRandomString(int length) {
     static const string charset = "abcdefghijklmnopqrstuvwxyz";
     static default_random_engine randomEngine{random_device{}()};
@@ -149,7 +153,6 @@ string generateRandomString(int length) {
     return result;
 }
 
-// Function to generate a fake address
 string generateFakeAddress() {
     static const vector<string> streetNames = {"Main St", "Broadway", "Elm St", "Maple Ave", "Oak St"};
     static const vector<string> cities = {"New York", "Los Angeles", "Chicago", "Houston", "Phoenix"};
@@ -166,7 +169,6 @@ string generateFakeAddress() {
     return address;
 }
 
-// Function to generate 8000 employees
 void generateNewDatabase(Database& db) {
     const int numberOfEmployees = 8000;
     const int numberOfFirstNames = 20;
@@ -185,7 +187,21 @@ void generateNewDatabase(Database& db) {
     cout << "New database generated with 8000 employees." << endl;
 }
 
-// Function to list all employees
 void listAllEmployees(Database& db) {
     db.displayAll();
+}
+
+void saveDatabaseToFile(Database& db)
+{
+    string filename;
+    cout << "Enter the name of the file to save the database: ";
+    cin >> filename;
+
+    ofstream outputFile(filename);
+    if (outputFile.is_open()) {
+        db.save(outputFile);
+        cout << "Database saved to " << filename << endl;
+    } else {
+        cerr << "Unable to open file for writing." << endl;
+    }
 }

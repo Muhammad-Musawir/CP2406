@@ -95,5 +95,11 @@ namespace Records {
 	{
 		return mHired;
 	}
+	const std::string& Employee::getMiddleName() const
+    {
+    return mMiddleName;
+	}
+
+
 
 }
