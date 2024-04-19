@@ -8,7 +8,6 @@
 using namespace std;
 using namespace Records;
 
-// Definition of save method
 void Database::save(ofstream& outputFile) {
     for (const auto& employee : mEmployees) {
         outputFile << employee.getFirstName() << " "
@@ -17,7 +16,7 @@ void Database::save(ofstream& outputFile) {
                    << employee.getAddress() << "\n";
     }
 }
-// Definition of loadFromFile method
+
 void Database::loadFromFile(const string& filename)
 {
     ifstream inputFile(filename);
@@ -27,7 +26,7 @@ void Database::loadFromFile(const string& filename)
         return;
     }
 
-    mEmployees.clear(); 
+    mEmployees.clear();
 
     string line;
     while (getline(inputFile, line))
@@ -41,6 +40,7 @@ void Database::loadFromFile(const string& filename)
 
     cout << "Database loaded successfully from file." << endl;
 }
+
 Employee& Database::addEmployee(const string& firstName,
     const std::string& middleName,
     const string& lastName,
@@ -114,4 +114,44 @@ void Database::fireEmployee(int employeeNumber)
     }
 }
 
+void Database::editEmployee(int employeeNumber, const std::string& address, int salary, bool hired) {
+}
+std::vector<Employee> Database::searchByFirstName(const std::string& firstName) const {
+    std::vector<Employee> result;
+    for (const auto& employee : mEmployees) {
+        if (employee.getFirstName().find(firstName) != std::string::npos) {
+            result.push_back(employee);
+        }
+    }
+    return result;
+}
 
+std::vector<Employee> Database::searchByMiddleName(const std::string& middleName) const {
+    std::vector<Employee> result;
+    for (const auto& employee : mEmployees) {
+        if (employee.getMiddleName().find(middleName) != std::string::npos) {
+            result.push_back(employee);
+        }
+    }
+    return result;
+}
+
+std::vector<Employee> Database::searchByLastName(const std::string& lastName) const {
+    std::vector<Employee> result;
+    for (const auto& employee : mEmployees) {
+        if (employee.getLastName().find(lastName) != std::string::npos) {
+            result.push_back(employee);
+        }
+    }
+    return result;
+}
+
+std::vector<Employee> Database::searchByAddress(const std::string& address) const {
+    std::vector<Employee> result;
+    for (const auto& employee : mEmployees) {
+        if (employee.getAddress().find(address) != std::string::npos) {
+            result.push_back(employee);
+        }
+    }
+    return result;
+}
