@@ -10,7 +10,7 @@
 using namespace std;
 using namespace Records;
 
-int displayMenu();
+int displayMenu(); 
 string generateRandomString(int length);
 string generateFakeAddress();
 void generateNewDatabase(Database& db);
@@ -18,10 +18,10 @@ void listAllEmployees(Database& db);
 void doHire(Database& db);
 void doFire(Database& db);
 void doPromote(Database& db);
-void doDemote(Database& db);
 void saveDatabaseToFile(Database& db);
 void loadDatabaseFromFile(Database& db);
 void editEmployee(Database& db);
+void searchEmployee(Database& db);
 
 int main()
 {
@@ -64,6 +64,9 @@ int main()
         case 10:
             editEmployee(employeeDB);
             break;
+        case 11:
+            searchEmployee(employeeDB);
+            break;
         default:
             cerr << "Unknown command." << endl;
             break;
@@ -90,6 +93,7 @@ int displayMenu()
     cout << "8) Save database to file" << endl;
     cout << "9) Load database from file" << endl;
     cout << "10) Edit employee" << endl;
+    cout << "11) Search employee" << endl;
     cout << "0) Quit" << endl;
     cout << endl;
     cout << "---> ";
@@ -108,13 +112,13 @@ void doHire(Database& db)
     string firstName;
     string middleName = "";
     string lastName;
-    string address = ""; 
+    string address = "";
 
     cout << "First name? ";
     cin >> firstName;
     cout << "Last name? ";
     cin >> lastName;
-    
+
     db.addEmployee(firstName, middleName, lastName, address);
 }
 
@@ -150,7 +154,104 @@ void doPromote(Database& db)
     }
 }
 
-void editEmployee(Database& db) {
+void searchEmployee(Database& db) {
+    int searchOption;
+    cout << "How would you like to search?" << endl;
+    cout << "1) By first name" << endl;
+    cout << "2) By middle name" << endl;
+    cout << "3) By last name" << endl;
+    cout << "4) By address" << endl;
+    cout << "---> ";
+    cin >> searchOption;
+
+    string searchText;
+    cout << "Enter the search text: ";
+    cin >> searchText;
+
+    switch (searchOption) {
+        case 1: {
+            auto results = db.searchByFirstName(searchText);
+            cout << "Search results by first name:" << endl;
+            for (const auto& employee : results) {
+                employee.display();
+            }
+            break;
+        }
+        case 2: {
+            auto results = db.searchByMiddleName(searchText);
+            cout << "Search results by middle name:" << endl;
+            for (const auto& employee : results) {
+                employee.display();
+            }
+            break;
+        }
+        case 3: {
+            auto results = db.searchByLastName(searchText);
+            cout << "Search results by last name:" << endl;
+            for (const auto& employee : results) {
+                employee.display();
+            }
+            break;
+        }
+        case 4: {
+            auto results = db.searchByAddress(searchText);
+            cout << "Search results by address:" << endl;
+            for (const auto& employee : results) {
+                employee.display();
+            }
+            break;
+        }
+        default:
+            cerr << "Invalid search option." << endl;
+            break;
+    }
+}
+
+
+void generateNewDatabase(Database& db)
+{
+    const int numberOfEmployees = 8000;
+    const int numberOfFirstNames = 20;
+    const int numberOfMiddleNames = 20;
+    const int numberOfLastNames = 20;
+
+    for (int i = 0; i < numberOfEmployees; ++i) {
+        string firstName = "First" + to_string(i % numberOfFirstNames);
+        string middleName = "Middle" + to_string(i % numberOfMiddleNames);
+        string lastName = "Last" + to_string(i % numberOfLastNames);
+        string address = generateFakeAddress(); // Use generateFakeAddress() here
+
+        db.addEmployee(firstName, middleName, lastName, address);
+    }
+
+    cout << "New database generated with 8000 employees." << endl;
+}
+
+void saveDatabaseToFile(Database& db)
+{
+    string filename;
+    cout << "Enter the name of the file to save the database: ";
+    cin >> filename;
+
+    ofstream outputFile(filename);
+    if (outputFile.is_open()) {
+        db.save(outputFile);
+        cout << "Database saved to " << filename << endl;
+    } else {
+        cerr << "Unable to open file for writing." << endl;
+    }
+}
+
+void loadDatabaseFromFile(Database& db)
+{
+    string filename;
+    cout << "Enter the name of the file to load the database from: ";
+    cin >> filename;
+    db.loadFromFile(filename);
+}
+
+void editEmployee(Database& db)
+{
     int employeeNumber;
     cout << "Enter the employee number you want to edit: ";
     cin >> employeeNumber;
@@ -193,49 +294,4 @@ string generateFakeAddress() {
                      states[cityStateDist(randomEngine)];
 
     return address;
-}
-
-void generateNewDatabase(Database& db) {
-    const int numberOfEmployees = 8000;
-    const int numberOfFirstNames = 20;
-    const int numberOfMiddleNames = 20;
-    const int numberOfLastNames = 20;
-
-    for (int i = 0; i < numberOfEmployees; ++i) {
-        string firstName = "First" + to_string(i % numberOfFirstNames);
-        string middleName = "Middle" + to_string(i % numberOfMiddleNames);
-        string lastName = "Last" + to_string(i % numberOfLastNames);
-        string address = generateFakeAddress();
-
-        db.addEmployee(firstName, middleName, lastName, address);
-    }
-
-    cout << "New database generated with 8000 employees." << endl;
-}
-
-void listAllEmployees(Database& db) {
-    db.displayAll();
-}
-
-void saveDatabaseToFile(Database& db)
-{
-    string filename;
-    cout << "Enter the name of the file to save the database: ";
-    cin >> filename;
-
-    ofstream outputFile(filename);
-    if (outputFile.is_open()) {
-        db.save(outputFile);
-        cout << "Database saved to " << filename << endl;
-    } else {
-        cerr << "Unable to open file for writing." << endl;
-    }
-}
-
-void loadDatabaseFromFile(Database& db) {
-    string filename;
-    cout << "Enter the name of the file to load the database from: ";
-    cin >> filename;
-
-    db.loadFromFile(filename);
 }
