@@ -1,6 +1,6 @@
 #include <iostream>
 #include <vector>
-#include<random>
+#include <random>
 #include <algorithm>
 #include <fstream>
 #include <stdexcept>
@@ -20,6 +20,8 @@ void doFire(Database& db);
 void doPromote(Database& db);
 void doDemote(Database& db);
 void saveDatabaseToFile(Database& db);
+void loadDatabaseFromFile(Database& db);
+void editEmployee(Database& db);
 
 int main()
 {
@@ -57,13 +59,10 @@ int main()
             saveDatabaseToFile(employeeDB);
             break;
         case 9:
-    {
-        string filename;
-        cout << "Enter the name of the file to load the database from: ";
-        cin >> filename;
-        employeeDB.loadFromFile(filename);
-        break;
-    }
+            loadDatabaseFromFile(employeeDB);
+            break;
+        case 10:
+            editEmployee(employeeDB);
             break;
         default:
             cerr << "Unknown command." << endl;
@@ -90,6 +89,7 @@ int displayMenu()
     cout << "7) Generate new database" << endl;
     cout << "8) Save database to file" << endl;
     cout << "9) Load database from file" << endl;
+    cout << "10) Edit employee" << endl;
     cout << "0) Quit" << endl;
     cout << endl;
     cout << "---> ";
@@ -148,6 +148,22 @@ void doPromote(Database& db)
     } catch (const std::logic_error& exception) {
         cerr << "Unable to promote employee: " << exception.what() << endl;
     }
+}
+
+void editEmployee(Database& db) {
+    int employeeNumber;
+    cout << "Enter the employee number you want to edit: ";
+    cin >> employeeNumber;
+    cout << "Enter the new address: ";
+    string address;
+    cin >> address;
+    cout << "Enter the new salary: ";
+    int salary;
+    cin >> salary;
+    cout << "Is the employee hired? (1 for yes, 0 for no): ";
+    int hireStatus;
+    cin >> hireStatus;
+    db.editEmployee(employeeNumber, address, salary, hireStatus == 1);
 }
 
 string generateRandomString(int length) {
@@ -215,10 +231,11 @@ void saveDatabaseToFile(Database& db)
         cerr << "Unable to open file for writing." << endl;
     }
 }
+
 void loadDatabaseFromFile(Database& db) {
-    std::string filename;
-    std::cout << "Enter the name of the file to load the database from: ";
-    std::cin >> filename;
+    string filename;
+    cout << "Enter the name of the file to load the database from: ";
+    cin >> filename;
 
     db.loadFromFile(filename);
 }
