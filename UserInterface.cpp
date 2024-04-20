@@ -57,9 +57,6 @@ int main()
                     break;
                 }
                 case 2: {
-                    // Handle employee login
-                    // Implement employee login logic here
-                    // For now, let's assume all employees are automatically logged in
                     loggedIn = true;
                     isManager = false;
                     break;
@@ -131,31 +128,32 @@ int main()
             } else {
                 // Employee menu options
                 int selection;
-                while (true) {
-                    selection = displayEmployeeMenu();
-                    if (selection == 0) {
-                        done = true;
-                        break;
-                    }
-                    // Handle other employee menu options
-                    switch (selection) {
-                        case 1:
-                            employeeDB.displayAll();
-                            break;
-                        case 2:
-                            employeeDB.displayCurrent();
-                            break;
-                        case 3:
-                            employeeDB.displayFormer();
-                            break;
-                        case 4:
-                            searchEmployee(employeeDB);
-                            break;
-                        default:
-                            cerr << "Unknown command." << endl;
-                            break;
-                    }
-                }
+while (true) {
+    selection = displayEmployeeMenu();
+    if (selection == 0) {
+        done = true;
+        break;
+    }
+
+    // Handle employee menu options
+    switch (selection) {
+        case 1:
+            employeeDB.displayAll();
+            break;
+        case 2:
+            employeeDB.displayCurrent();
+            break;
+        case 3:
+            employeeDB.displayFormer();
+            break;
+        case 4:
+            searchEmployee(employeeDB);
+            break;
+        default:
+            cerr << "Unknown command." << endl;
+            break;
+                  }
+            }
             }
         }
     }
