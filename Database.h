@@ -16,6 +16,7 @@ namespace Records {
         Employee& getEmployee(int employeeNumber);
         Employee& getEmployee(const std::string& firstName,
                               const std::string& lastName);
+
         void displayAll() const;
         void fireEmployee(int employeeNumber);
         void displayCurrent() const;
@@ -23,6 +24,10 @@ namespace Records {
         void save(std::ofstream& outputFile);
         void loadFromFile(const std::string& filename);
         void editEmployee(int employeeNumber, const std::string& address, int salary, bool hired);
+        std::vector<Employee> searchByFirstName(const std::string& firstName) const;
+        std::vector<Employee> searchByMiddleName(const std::string& middleName) const;
+        std::vector<Employee> searchByLastName(const std::string& lastName) const;
+        std::vector<Employee> searchByAddress(const std::string& address) const;
 
     private:
         std::vector<Employee> mEmployees;

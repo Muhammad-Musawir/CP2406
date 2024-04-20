@@ -99,7 +99,4 @@ namespace Records {
     {
     return mMiddleName;
 	}
-
-
-
 }

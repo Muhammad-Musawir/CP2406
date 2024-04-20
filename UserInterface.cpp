@@ -6,10 +6,12 @@
 #include <stdexcept>
 #include <exception>
 #include "Database.h"
+#include "Manager.h" // Include Manager header
 
 using namespace std;
 using namespace Records;
 
+// Function prototypes
 int displayMenu(); 
 string generateRandomString(int length);
 string generateFakeAddress();
@@ -22,54 +24,119 @@ void saveDatabaseToFile(Database& db);
 void loadDatabaseFromFile(Database& db);
 void editEmployee(Database& db);
 void searchEmployee(Database& db);
+void managerLogin(Manager& manager); // Function to handle manager login
 
 int main()
 {
     Database employeeDB;
+    Manager manager("admin", "admin123");// Create Manager object
 
     bool done = false;
+    bool loggedIn = false;
+    bool isManager = false;
+
     while (!done) {
-        int selection = displayMenu();
-        switch (selection) {
-        case 0:
-            done = true;
-            break;
-        case 1:
-            doHire(employeeDB);
-            break;
-        case 2:
-            doFire(employeeDB);
-            break;
-        case 3:
-            doPromote(employeeDB);
-            break;
-        case 4:
-            employeeDB.displayAll();
-            break;
-        case 5:
-            employeeDB.displayCurrent();
-            break;
-        case 6:
-            employeeDB.displayFormer();
-            break;
-        case 7:
-            generateNewDatabase(employeeDB);
-            break;
-        case 8:
-            saveDatabaseToFile(employeeDB);
-            break;
-        case 9:
-            loadDatabaseFromFile(employeeDB);
-            break;
-        case 10:
-            editEmployee(employeeDB);
-            break;
-        case 11:
-            searchEmployee(employeeDB);
-            break;
-        default:
-            cerr << "Unknown command." << endl;
-            break;
+        if (!loggedIn) {
+            int loginChoice;
+            cout << "Login as:" << endl;
+            cout << "1) Manager" << endl;
+            cout << "2) Employee" << endl;
+            cout << "0) Quit" << endl;
+            cout << "---> ";
+            cin >> loginChoice;
+
+            switch (loginChoice) {
+                case 1: {
+                    managerLogin(manager);
+                    if (manager.isLoggedIn()) {
+                        loggedIn = true;
+                        isManager = true;
+                    }
+                    break;
+                }
+                case 2: {
+                    // Handle employee login
+                    // Implement employee login logic here
+                    // For now, let's assume all employees are automatically logged in
+                    loggedIn = true;
+                    isManager = false;
+                    break;
+                }
+                case 0: {
+                    done = true;
+                    break;
+                }
+                default: {
+                    cerr << "Invalid choice. Please try again." << endl;
+                    break;
+                }
+            }
+        } else {
+            if (isManager) {
+                // Manager menu options
+                int selection = displayMenu();
+                switch (selection) {
+                    case 0:
+                        done = true;
+                        break;
+                    case 1:
+                        doHire(employeeDB);
+                        break;
+                    case 2:
+                        doFire(employeeDB);
+                        break;
+                    case 3:
+                        doPromote(employeeDB);
+                        break;
+                    case 4:
+                        employeeDB.displayAll();
+                        break;
+                    case 5:
+                        employeeDB.displayCurrent();
+                        break;
+                    case 6:
+                        employeeDB.displayFormer();
+                        break;
+                    case 7:
+                        generateNewDatabase(employeeDB);
+                        break;
+                    case 8:
+                        saveDatabaseToFile(employeeDB);
+                        break;
+                    case 9:
+                        loadDatabaseFromFile(employeeDB);
+                        break;
+                    case 10:
+                        editEmployee(employeeDB);
+                        break;
+                    case 11:
+                        searchEmployee(employeeDB);
+                        break;
+                    default:
+                        cerr << "Unknown command." << endl;
+                        break;
+                }
+            } else {
+                // Employee menu options
+                int selection = displayMenu();
+                switch (selection) {
+                    case 0:
+                        done = true;
+                        break;
+                    case 4:
+                        employeeDB.displayAll();
+                        break;
+                    case 5:
+                        employeeDB.displayCurrent();
+                        break;
+                    case 6:
+                        employeeDB.displayFormer();
+                        break;
+                    default:
+                        cerr << "Unknown command." << endl;
+                        break;
+                }
+            }
         }
     }
 
@@ -94,6 +161,7 @@ int displayMenu()
     cout << "9) Load database from file" << endl;
     cout << "10) Edit employee" << endl;
     cout << "11) Search employee" << endl;
+    cout << "12) Manager Login" << endl; // Add option for manager login
     cout << "0) Quit" << endl;
     cout << endl;
     cout << "---> ";
@@ -265,6 +333,21 @@ void editEmployee(Database& db)
     int hireStatus;
     cin >> hireStatus;
     db.editEmployee(employeeNumber, address, salary, hireStatus == 1);
+}
+
+void managerLogin(Manager& manager) {
+    string username, password;
+    cout << "Enter manager username: ";
+    cin >> username;
+    cout << "Enter manager password: ";
+    cin >> password;
+
+    if (manager.validateLogin(username, password)) {
+        cout << "Manager login successful." << endl;
+        // Add manager-specific functionalities here
+    } else {
+        cerr << "Invalid manager username or password." << endl;
+    }
 }
 
 string generateRandomString(int length) {
