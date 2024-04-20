@@ -1,11 +1,12 @@
 #include "Manager.h"
 #include <fstream>
 
-Manager::Manager() {}
+Manager::Manager() : loggedIn(false) {}
 
 Manager::Manager(const std::string& username, const std::string& password) {
     // Initialize Manager object with provided username and password
     userCredentials[username] = password;
+    loggedIn = false; // Initially not logged in
 }
 
 bool Manager::createLogin(const std::string& username, const std::string& password) {
@@ -70,4 +71,19 @@ bool Manager::loadLoginCredentialsFromFile(const std::string& filename) {
 bool Manager::validateLogin(const std::string& username, const std::string& password) const {
     // Check if the username exists and the password matches
     return (userCredentials.find(username) != userCredentials.end() && userCredentials.at(username) == password);
+}
+
+bool Manager::isLoggedIn() const {
+    return loggedIn;
+}
+
+bool Manager::setIsLoggedIn(bool value) {
+    loggedIn = value;
+    return true;
+}
+
+bool Manager::setIsManager(bool value) {
+    // Here you can implement the logic for setting the isManager flag
+    // For simplicity, I'm just returning true
+    return true;
 }

@@ -12,7 +12,8 @@ using namespace std;
 using namespace Records;
 
 // Function prototypes
-int displayMenu(); 
+int displayManagerMenu(); 
+int displayEmployeeMenu();
 string generateRandomString(int length);
 string generateFakeAddress();
 void generateNewDatabase(Database& db);
@@ -74,67 +75,82 @@ int main()
         } else {
             if (isManager) {
                 // Manager menu options
-                int selection = displayMenu();
-                switch (selection) {
-                    case 0:
+                int selection;
+                while (true) {
+                    selection = displayManagerMenu();
+                    if (selection == 0) {
                         done = true;
                         break;
-                    case 1:
-                        doHire(employeeDB);
-                        break;
-                    case 2:
-                        doFire(employeeDB);
-                        break;
-                    case 3:
-                        doPromote(employeeDB);
-                        break;
-                    case 4:
-                        employeeDB.displayAll();
-                        break;
-                    case 5:
-                        employeeDB.displayCurrent();
-                        break;
-                    case 6:
-                        employeeDB.displayFormer();
-                        break;
-                    case 7:
-                        generateNewDatabase(employeeDB);
-                        break;
-                    case 8:
-                        saveDatabaseToFile(employeeDB);
-                        break;
-                    case 9:
-                        loadDatabaseFromFile(employeeDB);
-                        break;
-                    case 10:
-                        editEmployee(employeeDB);
-                        break;
-                    case 11:
-                        searchEmployee(employeeDB);
-                        break;
-                    default:
-                        cerr << "Unknown command." << endl;
-                        break;
+                    } else if (selection == 12) {
+                        break; // break out of manager menu to go back to login
+                    }
+                    // Handle other manager menu options
+                    switch (selection) {
+                        case 1:
+                            doHire(employeeDB);
+                            break;
+                        case 2:
+                            doFire(employeeDB);
+                            break;
+                        case 3:
+                            doPromote(employeeDB);
+                            break;
+                        case 4:
+                            employeeDB.displayAll();
+                            break;
+                        case 5:
+                            employeeDB.displayCurrent();
+                            break;
+                        case 6:
+                            employeeDB.displayFormer();
+                            break;
+                        case 7:
+                            generateNewDatabase(employeeDB);
+                            break;
+                        case 8:
+                            saveDatabaseToFile(employeeDB);
+                            break;
+                        case 9:
+                            loadDatabaseFromFile(employeeDB);
+                            break;
+                        case 10:
+                            editEmployee(employeeDB);
+                            break;
+                        case 11:
+                            searchEmployee(employeeDB);
+                            break;
+                        default:
+                            cerr << "Unknown command." << endl;
+                            break;
+                    }
                 }
             } else {
                 // Employee menu options
-                int selection = displayMenu();
-                switch (selection) {
-                    case 0:
+                int selection;
+                while (true) {
+                    selection = displayEmployeeMenu();
+                    if (selection == 0) {
                         done = true;
                         break;
-                    case 4:
-                        employeeDB.displayAll();
-                        break;
-                    case 5:
-                        employeeDB.displayCurrent();
-                        break;
-                    case 6:
-                        employeeDB.displayFormer();
-                        break;
-                    default:
-                        cerr << "Unknown command." << endl;
-                        break;
+                    }
+                    // Handle other employee menu options
+                    switch (selection) {
+                        case 1:
+                            employeeDB.displayAll();
+                            break;
+                        case 2:
+                            employeeDB.displayCurrent();
+                            break;
+                        case 3:
+                            employeeDB.displayFormer();
+                            break;
+                        case 4:
+                            searchEmployee(employeeDB);
+                            break;
+                        default:
+                            cerr << "Unknown command." << endl;
+                            break;
+                    }
                 }
             }
         }
@@ -143,12 +159,12 @@ int main()
     return 0;
 }
 
-int displayMenu()
+int displayManagerMenu()
 {
     int selection;
 
     cout << endl;
-    cout << "Employee Database" << endl;
+    cout << "Manager Menu" << endl;
     cout << "-----------------" << endl;
     cout << "1) Hire a new employee" << endl;
     cout << "2) Fire an employee" << endl;
@@ -161,7 +177,31 @@ int displayMenu()
     cout << "9) Load database from file" << endl;
     cout << "10) Edit employee" << endl;
     cout << "11) Search employee" << endl;
-    cout << "12) Manager Login" << endl; // Add option for manager login
+    cout << "12) Manager Logout" << endl;
+    cout << "0) Quit" << endl;
+    cout << endl;
+    cout << "---> ";
+
+    cin >> selection;
+
+    // Clear the input buffer to prevent any leftover characters
+    cin.clear();
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+    return selection;
+}
+
+int displayEmployeeMenu()
+{
+    int selection;
+
+    cout << endl;
+    cout << "Employee Menu" << endl;
+    cout << "-----------------" << endl;
+    cout << "1) List all employees" << endl;
+    cout << "2) List all current employees" << endl;
+    cout << "3) List all former employees" << endl;
+    cout << "4) Search employee" << endl;
     cout << "0) Quit" << endl;
     cout << endl;
     cout << "---> ";
@@ -344,11 +384,14 @@ void managerLogin(Manager& manager) {
 
     if (manager.validateLogin(username, password)) {
         cout << "Manager login successful." << endl;
+        manager.setIsLoggedIn(true); // Update the loggedIn flag using the setter function
+        manager.setIsManager(true); // Update the isManager flag using the setter function
         // Add manager-specific functionalities here
     } else {
         cerr << "Invalid manager username or password." << endl;
     }
 }
+
 
 string generateRandomString(int length) {
     static const string charset = "abcdefghijklmnopqrstuvwxyz";
