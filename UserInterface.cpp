@@ -26,6 +26,7 @@ void loadDatabaseFromFile(Database& db);
 void editEmployee(Database& db);
 void searchEmployee(Database& db);
 void managerLogin(Manager& manager); // Function to handle manager login
+void managerLogout(Manager& manager);
 
 int main()
 {
@@ -79,10 +80,13 @@ int main()
                 while (true) {
                     selection = displayManagerMenu();
                     if (selection == 0) {
-                        done = true;
+                        manager.logout(); // Logout manager
+                        loggedIn = false; // Set loggedIn to false
                         break;
                     } else if (selection == 12) {
-                        break; // break out of manager menu to go back to login
+                        manager.logout(); // Logout manager
+                        loggedIn = false; // Set loggedIn to false
+                        break;
                     }
                     // Handle other manager menu options
                     switch (selection) {
@@ -158,6 +162,7 @@ int main()
 
     return 0;
 }
+
 
 int displayManagerMenu()
 {
@@ -390,6 +395,10 @@ void managerLogin(Manager& manager) {
     } else {
         cerr << "Invalid manager username or password." << endl;
     }
+}
+void managerLogout(Manager& manager) {
+    manager.logout();
+    cout << "Manager logout successful." << endl;
 }
 
 

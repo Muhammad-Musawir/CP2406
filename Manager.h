@@ -8,6 +8,7 @@ class Manager {
 private:
     std::map<std::string, std::string> userCredentials;
     bool loggedIn;
+    bool isManager;
 
 public:
     Manager();
@@ -21,6 +22,7 @@ public:
     bool isLoggedIn() const;
     bool setIsLoggedIn(bool value); // Declare setIsLoggedIn
     bool setIsManager(bool value); // Declare setIsManager
+    void logout();
 };
 
 #endif // MANAGER_H

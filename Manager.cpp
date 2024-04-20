@@ -87,3 +87,6 @@ bool Manager::setIsManager(bool value) {
     // For simplicity, I'm just returning true
     return true;
 }
+void Manager::logout() {
+    loggedIn = false;
+}
