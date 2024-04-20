@@ -6,13 +6,13 @@ Manager::Manager() : loggedIn(false) {}
 Manager::Manager(const std::string& username, const std::string& password) {
     // Initialize Manager object with provided username and password
     userCredentials[username] = password;
-    loggedIn = false; // Initially not logged in
+    loggedIn = false; 
 }
 
 bool Manager::createLogin(const std::string& username, const std::string& password) {
     // Check if the username already exists
     if (userCredentials.find(username) != userCredentials.end()) {
-        return false; // Username already exists
+        return false; 
     }
     // Add the new username-password pair to the map
     userCredentials[username] = password;
@@ -34,7 +34,6 @@ bool Manager::deleteLogin(const std::string& username) {
     if (userCredentials.find(username) == userCredentials.end()) {
         return false; // Username does not exist
     }
-    // Remove the username-password pair from the map
     userCredentials.erase(username);
     return true;
 }
@@ -59,7 +58,6 @@ bool Manager::loadLoginCredentialsFromFile(const std::string& filename) {
     if (!inputFile.is_open()) {
         return false; // Failed to open file
     }
-    // Read each username-password pair from the file and store them in the map
     std::string username, password;
     while (inputFile >> username >> password) {
         userCredentials[username] = password;
@@ -83,8 +81,7 @@ bool Manager::setIsLoggedIn(bool value) {
 }
 
 bool Manager::setIsManager(bool value) {
-    // Here you can implement the logic for setting the isManager flag
-    // For simplicity, I'm just returning true
+    
     return true;
 }
 void Manager::logout() {

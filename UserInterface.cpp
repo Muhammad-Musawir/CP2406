@@ -25,7 +25,7 @@ void saveDatabaseToFile(Database& db);
 void loadDatabaseFromFile(Database& db);
 void editEmployee(Database& db);
 void searchEmployee(Database& db);
-void managerLogin(Manager& manager); // Function to handle manager login
+void managerLogin(Manager& manager); 
 void managerLogout(Manager& manager);
 
 int main()
@@ -330,8 +330,7 @@ void generateNewDatabase(Database& db)
         string firstName = "First" + to_string(i % numberOfFirstNames);
         string middleName = "Middle" + to_string(i % numberOfMiddleNames);
         string lastName = "Last" + to_string(i % numberOfLastNames);
-        string address = generateFakeAddress(); // Use generateFakeAddress() here
-
+        string address = generateFakeAddress(); 
         db.addEmployee(firstName, middleName, lastName, address);
     }
 
@@ -387,9 +386,8 @@ void managerLogin(Manager& manager) {
 
     if (manager.validateLogin(username, password)) {
         cout << "Manager login successful." << endl;
-        manager.setIsLoggedIn(true); // Update the loggedIn flag using the setter function
-        manager.setIsManager(true); // Update the isManager flag using the setter function
-        // Add manager-specific functionalities here
+        manager.setIsLoggedIn(true); 
+        manager.setIsManager(true); 
     } else {
         cerr << "Invalid manager username or password." << endl;
     }
